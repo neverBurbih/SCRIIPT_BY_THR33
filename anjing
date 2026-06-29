@@ -1,3 +1,31 @@
+-- Nama Github yang diizinkan untuk meng-host script ini
+-- (Ganti dengan username Github lu yang asli)
+local AllowedOwner = "neverBurbih" 
+
+-- 1. DETEKSI LOADSTRING & SOURCE VALIDATION
+-- debug.info(1, "s") mengembalikan asal-usul (source) dari chunk kode yang sedang berjalan
+-- Jika dijalankan via HttpGet/loadstring, biasanya sourcenya mengandung URL atau pola tertentu
+local currentSource = debug.info(1, "s")
+
+-- Pastikan script tidak dijalankan secara lokal (di-paste langsung)
+if not currentSource:find("githubusercontent.com") and not currentSource:find("raw.githubusercontent") then
+    -- Jika di-paste langsung atau di-host di tempat lain, langsung kick
+    game.Players.LocalPlayer:Kick("Anti-Tamper: Invalid Execution Context (Must be loaded via official Github Loadstring).")
+    return
+end
+
+-- 2. VERIFIKASI PEMILIK REPOSITORI / USERNAME
+-- Kita cross-check apakah URL source-nya beneran mengandung username lu
+if not currentSource:find("/" .. AllowedOwner .. "/") then
+    game.Players.LocalPlayer:Kick("Anti-Tamper: Unauthorized Distribution / Tampered Source.")
+    return
+end
+
+-- =======================================================
+-- KODE UTAMA LU DI BAWAH SINI
+-- =======================================================
+print("Script berhasil di-load dengan aman dari Github milik " .. AllowedOwner)
+
 -- ================================================================
 -- HNDRIXX PREMIUM V2.0 — GREY EDITION (SQUARE)
 -- ================================================================
