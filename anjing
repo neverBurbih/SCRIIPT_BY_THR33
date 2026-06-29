@@ -1,26 +1,31 @@
--- Nama Github yang diizinkan untuk meng-host script ini
-local AllowedOwner = "neverBurbih" 
+-- Nama Github yang diizinkan
+local AllowedOwner = "neverBurbih"
 
--- 1. DETEKSI LOADSTRING & SOURCE VALIDATION
-local currentSource = debug.info(1, "s")
-
--- Cek apakah script dijalankan langsung (di-paste mentah-mentah) tanpa loadstring resmi
-if not currentSource:find("githubusercontent.com") and not currentSource:find("raw.githubusercontent") then
-    game.Players.LocalPlayer:Kick("Anti-Tamper: Invalid Execution Context (Must be loaded via official Github Loadstring).")
-    return
+-- Fungsi untuk mengecek koneksi dan validitas source secara dinamis
+local function verifySource()
+    local success, result = pcall(function()
+        -- Kita ketuk langsung API Github untuk memastikan repository dan akun lu aktif/valid
+        return game:HttpGet("https://api.github.com/repos/" .. AllowedOwner .. "/SCRIIPT_BY_THR33")
+    end)
+    
+    -- Jika API Github tidak merespon atau mengembalikan error (misal rate limit / repo ga ada)
+    if not success or not result or result:find("Not Found") then
+        return false
+    end
+    
+    return true
 end
 
--- 2. VERIFIKASI USERNAME GITHUB
--- Memastikan file yang di-load berasal dari repository milik 'neverBurbih'
-if not currentSource:find("/" .. AllowedOwner .. "/") then
-    game.Players.LocalPlayer:Kick("Anti-Tamper: Unauthorized Distribution / Tampered Source.")
+-- Eksekusi verifikasi
+if not verifySource() then
+    game.Players.LocalPlayer:Kick("Anti-Tamper: Failed to verify script origin configuration.")
     return
 end
 
 -- =======================================================
 -- KODE UTAMA SCRIPT "THR33" LU DI BAWAH SINI
 -- =======================================================
-print("Script THR33 berhasil di-load dengan aman dari Github resmi!")
+print("Script THR33 berhasil berjalan!")
 
 -- ================================================================
 -- HNDRIXX PREMIUM V2.0 — GREY EDITION (SQUARE)
